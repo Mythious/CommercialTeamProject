@@ -22,14 +22,14 @@ public class LightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float _noise = Mathf.PerlinNoise(Random.Range(0.0f, 65000.0f), Time.deltaTime * Random.Range(0.01f,1f));
-        //mLightSource.intensity = Mathf.Lerp(mMinIntensity, mMaxIntensity, _noise);
+        //float _noise = Mathf.PerlinNoise(Random.Range(0.0f, 65000.0f), Time.deltaTime * Random.Range(0.01f,1f));
         mLightSource.color = mOriginalColour * FLickerAttenuation();
     }
 
     public float FLickerAttenuation()
     {
         float _offsetX = (Time.deltaTime * Random.Range(0.01f, 1f)) * mFrequency;
+        _offsetX = _offsetX - Mathf.Floor(_offsetX);
         float _offsetY = Mathf.PerlinNoise(_offsetX, Random.value * 2);
         return (_offsetY * mAmplitude) + mBaseIntensity;
     }
