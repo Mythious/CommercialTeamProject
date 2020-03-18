@@ -7,6 +7,8 @@ public class Controller : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject pPlayer;
+    public Vector3 mLastLook;
+    public Vector3 mCurrentLook;
     // Update is called once per frame
     private float speed = 5;
     private Rigidbody rb;
@@ -14,7 +16,7 @@ public class Controller : MonoBehaviour
     // Lamp Specific
     public GameObject mLamp;
     public List<Light> mSources = new List<Light>();
-
+    
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,21 +26,26 @@ public class Controller : MonoBehaviour
     {
         //Cursor.lockState = CursorLockMode.Locked;
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
         Vector3 _directionVector = new Vector3(horizontal, 0, vertical);
 
 
         // Translate
-        Vector3 _movement = _directionVector * speed * Time.deltaTime;
+        Vector3 _movement = _directionVector.normalized * speed * Time.deltaTime;
         rb.transform.Translate(_movement, Space.World);
 
         // Rotate
-        Quaternion _direction = Quaternion.LookRotation(_directionVector);
+        if (_movement != Vector3.zero)
+        {
+            mCurrentLook = _directionVector;
+        }
+        Quaternion _direction = Quaternion.LookRotation(mCurrentLook);
         transform.rotation = Quaternion.Slerp(transform.rotation, _direction, Time.deltaTime * 8);
         
 
         UpdateLightSources();
+        mLastLook = mCurrentLook;
     }
 
     private void UpdateLightSources()
