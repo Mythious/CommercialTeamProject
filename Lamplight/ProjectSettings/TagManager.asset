@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Hunter
+  - Ghost
+  - Lamp
+  - Environment
+  - Slowdown Status
   layers:
   - Default
   - TransparentFX
